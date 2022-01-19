@@ -120,6 +120,10 @@ _neper_completions() {
 
   -includepov "
 
+  opts_files="-loadtess -loadtesr -loadpoint -checktess \
+  -loadmesh -loadpoint \
+  -datanoderad -datanodecol "
+
   if [[ ${COMP_CWORD} -eq 1 ]]; then
 #  if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] && ! [[ ${opts} =~ "${COMP_WORDS[1]} " ]]; then
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
@@ -136,7 +140,9 @@ _neper_completions() {
       #     opts_T="${opts_T//$word2rm /}"
       #   fi
       # done
-      COMPREPLY=( $(compgen -W "${opts_T}" -- ${cur}) )
+      if ! [[ ${opts_files} =~ ${prev} ]]; then
+        COMPREPLY=( $(compgen -W "${opts_T}" -- ${cur}) )
+      fi
       ;;
 
     -M)
@@ -148,7 +154,7 @@ _neper_completions() {
       # done
       if [[ ${COMP_CWORD} -eq 2 ]] || [[ $cur == *, ]]; then
         COMP_WORDBREAKS=${COMP_WORDBREAKS},
-      else
+      elif ! [[ ${opts_files} =~ ${prev} ]]; then
         COMPREPLY=( $(compgen -W "${opts_M}" -- ${cur}) )
       fi
       ;;
@@ -176,7 +182,7 @@ _neper_completions() {
       # done
       if [[ ${COMP_CWORD} -eq 2 ]] || [[ $cur == *, ]]; then
         COMP_WORDBREAKS=${COMP_WORDBREAKS},
-      else
+      elif ! [[ ${opts_files} =~ ${prev} ]]; then
         COMPREPLY=( $(compgen -W "${opts_V}" -- ${cur}) )
       fi
       ;;
